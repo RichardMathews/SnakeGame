@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+        <h1 class="game">Snake Game</h1>
+    <title>Snake Game</title>
+    <style>
+    .test{
+        background-color: rgba(134, 121, 165, 0.219);
+        text-align: center;
+    }
+   .game{
+        font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        -webkit-text-stroke-width: 1px;
+        -webkit-text-stroke-color: rgba(0,0,255,0.5);
+        color: red;
+        text-shadow: 2px 2px black;
+   }
+
+    </style>
+</head>
+<body class="test">
+    <canvas id="stage" width="600" height="600"></canvas>
+    <script type="text/javascript"class="test">
+        window.onload = function(){
+        
+        var stage = document.getElementById('stage');
+        var context = stage.getContext("2d");
+        
+        document.addEventListener("keydown", keyPush)
+        
+        setInterval(game, 120);
+
+        const velocidade = 1;
+        var vel_X = vel_Y = 0;
+        var ponto_X = 10;
+        var ponto_Y = 15;
+        var tamanho_quad = 20;
+        var quant_tab = 30;
+        var apple_X = apple_Y = 15;
+
+        var rastro =[];
+        calda = 2;
+        function game(){
+            ponto_X += vel_X;
+            ponto_Y += vel_Y;
+
+        if(ponto_X < 0){
+            ponto_X = quant_tab -1;
+        }
+        if(ponto_X > quant_tab -1){
+            ponto_X = 0;
+        }
+        if(ponto_Y < 0){
+            ponto_Y = quant_tab -1;
+        }
+        if(ponto_Y > quant_tab -1){
+            ponto_Y = 0;
+        }
+        //Background
+        context.fillStyle = "black";
+        context.fillRect(0,0, stage.width, stage.height);
+        //Apple
+        context.fillStyle = "red";
+        context.fillRect(apple_X * tamanho_quad, apple_Y * tamanho_quad, tamanho_quad, tamanho_quad);
+        //Snake
+        context.fillStyle = "rgba(0,0,255,0.5)";
+        for(var i = 0; i < rastro.length; i++){
+            context.fillRect(rastro[i].x * tamanho_quad, rastro[i].y * tamanho_quad, tamanho_quad-1, tamanho_quad-1);
+        if(rastro[i].x == ponto_X && rastro[i].y == ponto_Y){
+            vel_X = vel_Y = 0;
+            calda = 2;
+            }
+        }
+        rastro.push({x:ponto_X, y:ponto_Y})
+        
+        while(rastro.length > calda){
+            rastro.shift(); //Remove o primeiro elemento do array
+        }
+        if(apple_X == ponto_X && apple_Y == ponto_Y){
+            calda++;
+            apple_X = Math.floor(Math.random()*quant_tab);
+            apple_Y = Math.floor(Math.random()*quant_tab);
+        }
+    }
+    function keyPush(event){
+        switch (event.keyCode) {
+            case 37: //Tecla esquerda
+                vel_X = -velocidade;
+                vel_Y = 0;
+                break;
+            case 38: //Tecla Cima
+                vel_X = 0;
+                vel_Y = -velocidade;
+                break;
+            case 39: //Tecla Direita
+                vel_X = velocidade;
+                vel_Y = 0;
+                break;
+            case 40: //Tecla Baixo
+                vel_X = 0;
+                vel_Y = velocidade;
+                break;
+        
+            default:
+                break;
+        }
+    }
+}
+    </script> 
+</body>
+</html>
